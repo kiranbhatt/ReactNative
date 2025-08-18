@@ -12,7 +12,7 @@ export default function AuthScreen() {
   const handleLogin = async () => {
     const { ok, data } = await loginUser(email, password);
     if (ok) {
-      router.replace("/");
+      router.replace("/(tabs)/home"); // ✅ navigate to tab layout (Home/index)
     } else {
       Alert.alert("Error", data.message || "Login failed");
     }
