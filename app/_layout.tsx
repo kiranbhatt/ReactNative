@@ -19,7 +19,7 @@ export default function RootLayout() {
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack screenOptions={{ headerShown: false }}>
           {/* Auth + Tabs routes */}
-          <Stack.Screen name="(screens)/AuthScreen" />   {/* ✅ match folder structure */}
+          <Stack.Screen name="(screens)/LoginScreen" />   {/* ✅ match folder structure */}
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="+not-found" />
         </Stack>

@@ -5,7 +5,7 @@ type AuthContextType = {
   user: string | null; // store token/email/etc
   login: (userData: string) => Promise<void>;
   logout: () => Promise<void>;
-  loading: boolean; // 👈 added loading flag
+  loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const storedUser = await AsyncStorage.getItem("user");
         if (storedUser) setUser(storedUser);
       } finally {
-        setLoading(false); // always stop loading
+        setLoading(false);
       }
     };
     loadUser();

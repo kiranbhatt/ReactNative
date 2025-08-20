@@ -9,12 +9,14 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Location from "expo-location";
-import { useRouter } from "expo-router";
+import { useRouter } from "expo-router";   // 👈 import router
+import { useAuth } from "@/context/AuthContext"; // ✅ import auth context
 
 export default function Headers() {
   const [address, setAddress] = useState("Fetching location...");
   const [deliveryTime] = useState("9 minutes");
-  const router = useRouter();
+  const { logout } = useAuth(); // ✅ get logout
+  const router = useRouter();   // 👈 initialize router
 
   useEffect(() => {
     (async () => {
@@ -37,6 +39,12 @@ export default function Headers() {
     })();
   }, []);
 
+  const handleLogout = async () => {
+    console.log("Logging out...");
+    await logout(); // clears AsyncStorage + resets context
+    router.replace("/(screens)/LoginScreen"); // force redirect to login
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       {/* 🔹 Top Header (logo + profile) */}
@@ -54,8 +62,8 @@ export default function Headers() {
           </View>
         </View>
 
-        {/* Right Side: Profile */}
-        <TouchableOpacity onPress={() => router.push("/profile")}>
+        {/* Right Side: Profile → Logout */}
+        <TouchableOpacity onPress={handleLogout}>
           <Image
             source={require("../assets/images/profile.png")}
             style={styles.profile}
@@ -76,10 +84,7 @@ export default function Headers() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    backgroundColor: "#fff",
-  },
-
+  safeArea: { backgroundColor: "#fff" },
   left: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -91,56 +96,33 @@ const styles = StyleSheet.create({
     marginRight: 10,
     resizeMode: "contain",
   },
-  tagline: {
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  delivery: {
-    fontSize: 12,
-    color: "green",
-    marginTop: 2,
-  },
-  address: {
-    fontSize: 12,
-    color: "#666",
-    marginTop: 2,
-  },
-  profile: {
-    width: 35,
-    height: 35,
-    borderRadius: 18,
-    marginLeft: 10,
-  },
-    header: {
+  tagline: { fontSize: 14, fontWeight: "bold", color: "#333" },
+  delivery: { fontSize: 12, color: "green", marginTop: 2 },
+  address: { fontSize: 12, color: "#666", marginTop: 2 },
+  profile: { width: 35, height: 35, borderRadius: 18, marginLeft: 10 },
+  header: {
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
     backgroundColor: "#fff",
-    borderBottomWidth: 1,         // ✅ separates header
-    borderBottomColor: "#eee",    // ✅ light divider
-    zIndex: 2,                    // ✅ ensure header stays on top
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+    zIndex: 2,
   },
-
   searchWrapper: {
-    marginTop: 0,                 // ✅ no gap "inside" header
+    marginTop: 0,
     backgroundColor: "#f0f0f0",
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginHorizontal: 16,
-    marginBottom: 8,   
+    marginBottom: 8,
     shadowColor: "#000",
-  shadowOpacity: 0.1,
-  shadowRadius: 3,
-  elevation: 2, // ✅ works for Android           // ✅ extra breathing room
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
-
-  searchInput: {
-    fontSize: 14,
-    color: "#000",
-  },
-  
+  searchInput: { fontSize: 14, color: "#000" },
 });

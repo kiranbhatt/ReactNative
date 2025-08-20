@@ -4,21 +4,20 @@ import { useAuth } from "@/context/AuthContext";
 import { View, ActivityIndicator } from "react-native";
 
 export default function Index() {
-  const { user, loading } = useAuth(); // 👈 get loading too
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) { // 👈 wait until AsyncStorage check finishes
+    if (!loading) {
       if (user) {
         router.replace("/(tabs)/home");
       } else {
-        router.replace("/(screens)/AuthScreen");
+        router.replace("/(screens)/LoginScreen");
       }
     }
   }, [user, loading, router]);
 
   if (loading) {
-    // splash / loader while checking AsyncStorage
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" />
